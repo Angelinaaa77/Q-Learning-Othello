@@ -1,53 +1,65 @@
 # Q-Learning Othello
 
-Angelina Huang's F26 ML Team Lab 7: an Othello agent trained from self-play with Q-learning, using a lookup table on small boards and a linear function approximator on the full 8×8 board.
+I taught a program to play Othello by having it play against itself. Nobody told it any strategy. It learned from wins and losses alone.
 
-## What I implemented
+The final agent beats a random player **87.6%** of the time and a simple greedy player **91.4%** of the time.
 
-The game engine, board symmetries, features, training loop and evaluation were provided. I wrote the six functions that make up the learning algorithm in [othello_q.py](othello_q.py):
+This was Lab 7 for the F26 ML Team. The game engine and training loop were provided, and I wrote the learning algorithm.
 
-- `terminal_reward`: the final result from one player's point of view (+1 win, 0 draw, −1 loss)
-- `q_target`: the two-player TD target, including the case where the opponent has to pass
-- `epsilon_greedy`: action selection with random tie-breaking
-- `TabularQ.update`: the tabular Q-learning update
-- `LinearQ.q_value`: `Q(s, a) = w · φ(s, a)`, with separate weights for each game phase
-- `LinearQ.update`: the semi-gradient update, `w ← w + α (target − Q) φ`
+## What I built
 
-## The two-player target
+- **Scoring a game:** decides whether a finished game was a win, draw, or loss.
+- **Learning from each move:** updates how good a move looks based on what happened next.
+- **Thinking about the opponent:** assumes the opponent will make their best move, because their gain is our loss.
+- **Choosing moves:** usually plays the best known move, but sometimes tries a random one to keep exploring.
+- **Two kinds of memory:** a lookup table for small boards, and a simple formula that works on the full 8x8 board.
 
-One agent plays both sides, so Q is always stored from the point of view of the player about to move. The game is zero-sum, which means the opponent's best outcome is our loss:
+## What I found
 
-| After our move | Target |
-|---|---|
-| Game over | `r` |
-| Opponent moves | `r − γ · max_a' Q(s', a')` |
-| Opponent must pass | `r + γ · max_a' Q(s', a')` |
+**A lookup table only works on small boards.** On 4x4, the agent had seen almost every position and won 88.4% of games. On 6x6, it stored over 700,000 positions but had seen only 27.6% of the ones it faced, so it played no better than random.
 
-## Findings
+**Exploring matters.** On 4x4, an agent that never explored won 78.5% of games. An agent that trained on completely random moves won 97.5%, because it saw far more of the game.
 
-- **Why a table stops working:** on 4×4 the table stores 4,408 states, has seen 99.9% of evaluation positions and wins 88.4% against random. On 6×6 it stores 712,265 states but has seen only 27.6% of them and wins 46.4%, no better than random play.
-- **Off-policy learning:** on 4×4, training with no exploration reaches 78.5% against random, while training on purely random moves reaches 97.5%. Q-learning can behave randomly and still learn the value of the best move.
-- **Learned strategy:** without being told any Othello strategy, the 8×8 agent gives corners the highest mid-game weight (+1.71) and gives X-squares and C-squares, which can hand the opponent a corner, negative weights (−0.32).
-- **Learning rate:** against a greedy opponent, α = 0.1 learns fastest but swings between 80% and 95.5%, α = 0.001 is still at 64% after 6,000 games, and α = 0.01 climbs from 61.5% to 97%.
-- **Mobility feature:** removing opponent mobility lowered the win rate against greedy from 95.2% to 92.4% over 500 games. This gap is within the variation between training runs, so one run does not prove the feature matters.
+**It discovered real Othello strategy.** The agent learned that corners are the most valuable squares, and that squares next to corners are risky because they can give the opponent a corner.
 
-The saved model, [q_linear_8.json](q_linear_8.json), won 87.6% against random and 91.4% against greedy over 500 games. Raw results are in [logs/](logs), and [experiments_and_questions.ipynb](experiments_and_questions.ipynb) contains the written analysis. [othello_q_no_mobility.py](othello_q_no_mobility.py) is the copy used for the mobility experiment.
+**Learning speed is a balance.** Learning too fast made results unstable, and learning too slowly barely improved. The middle setting worked best and reached 97% against the greedy player.
 
-## Running
+**Limiting the opponent's moves may help.** Removing this signal dropped the win rate against greedy from 95.2% to 92.4%. The gap is small, so it could also be normal variation between runs.
 
-Requires Python 3.8+ and no other packages.
+## Try it
+
+You only need Python 3.8 or newer.
+
+Play against the trained agent:
 
 ```bash
-# Run the tests
-python3 test_othello_q.py
-
-# Train
-python3 othello_q.py train --agent tabular --size 4 --episodes 30000
-python3 othello_q.py train --agent linear --size 8 --episodes 6000
-
-# Evaluate the saved 8x8 agent
-python3 othello_q.py eval --agent linear --size 8 --load q_linear_8.json
-
-# Play against it as x
 python3 othello_q.py play --agent linear --size 8 --load q_linear_8.json --human x
 ```
+
+See how well it plays:
+
+```bash
+python3 othello_q.py eval --agent linear --size 8 --load q_linear_8.json
+```
+
+Train a new agent:
+
+```bash
+python3 othello_q.py train --agent linear --size 8 --episodes 6000
+```
+
+Run the tests:
+
+```bash
+python3 test_othello_q.py
+```
+
+## Files
+
+- [othello_q.py](othello_q.py): the game and the agents
+- [test_othello_q.py](test_othello_q.py): the tests
+- [q_linear_8.json](q_linear_8.json): the trained 8x8 agent
+- [experiments_and_questions.ipynb](experiments_and_questions.ipynb): my experiments and written answers
+- [logs/](logs): raw results from each experiment
+- [othello_q_no_mobility.py](othello_q_no_mobility.py): the version used to test removing the opponent-move signal
+- [Lab Q-Learning Othello.pdf](<Lab Q-Learning Othello.pdf>): the original lab instructions
