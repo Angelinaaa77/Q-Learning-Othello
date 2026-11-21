@@ -1,0 +1,11 @@
+ep    3000  eps 1.000  vs random W/D/L 165/4/31  vs greedy 187/1/12  states=4784  1s
+ep    6000  eps 1.000  vs random W/D/L 186/3/11  vs greedy 200/0/0  states=6158  1s
+ep    9000  eps 1.000  vs random W/D/L 189/3/8  vs greedy 200/0/0  states=6903  2s
+ep   12000  eps 1.000  vs random W/D/L 190/0/10  vs greedy 200/0/0  states=7417  3s
+ep   15000  eps 1.000  vs random W/D/L 192/0/8  vs greedy 200/0/0  states=7793  3s
+ep   18000  eps 1.000  vs random W/D/L 192/4/4  vs greedy 200/0/0  states=8065  4s
+ep   21000  eps 1.000  vs random W/D/L 193/4/3  vs greedy 200/0/0  states=8293  4s
+ep   24000  eps 1.000  vs random W/D/L 197/2/1  vs greedy 200/0/0  states=8463  5s
+ep   27000  eps 1.000  vs random W/D/L 197/0/3  vs greedy 200/0/0  states=8568  6s
+ep   30000  eps 1.000  vs random W/D/L 195/2/3  vs greedy 200/0/0  states=8644  6s
+saved q3_random.pkl

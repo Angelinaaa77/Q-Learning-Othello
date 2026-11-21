@@ -1,0 +1,11 @@
+ep    3000  eps 0.000  vs random W/D/L 157/6/37  vs greedy 160/6/34  states=2395  1s
+ep    6000  eps 0.000  vs random W/D/L 158/9/33  vs greedy 158/9/33  states=2395  1s
+ep    9000  eps 0.000  vs random W/D/L 153/8/39  vs greedy 161/2/37  states=2395  2s
+ep   12000  eps 0.000  vs random W/D/L 162/7/31  vs greedy 170/1/29  states=2395  3s
+ep   15000  eps 0.000  vs random W/D/L 164/6/30  vs greedy 163/5/32  states=2395  3s
+ep   18000  eps 0.000  vs random W/D/L 162/1/37  vs greedy 164/4/32  states=2395  4s
+ep   21000  eps 0.000  vs random W/D/L 160/5/35  vs greedy 158/10/32  states=2395  4s
+ep   24000  eps 0.000  vs random W/D/L 163/5/32  vs greedy 157/5/38  states=2395  5s
+ep   27000  eps 0.000  vs random W/D/L 162/6/32  vs greedy 162/6/32  states=2395  6s
+ep   30000  eps 0.000  vs random W/D/L 157/10/33  vs greedy 163/6/31  states=2395  6s
+saved q3_no_explore.pkl
